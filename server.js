@@ -135,14 +135,9 @@ const handlePlayerUpdate = (socket, player) => {
   if (player.score >= gameSetup.SETUP.GAME.END_SCORE) {
     socket.emit("you-win");
     socket.broadcast.emit("you-lose");
-    const socketsInNamespace = io.of(namespace).sockets;
     players = [];
     collectibles = [];
     collectibleId = 0;
-    Object.keys(socketsInNamespace).forEach((socketId) => {
-      const socket = socketsInNamespace[socketId];
-      socket.disconnect(true);
-    });
   } else {
     const playerIndex = players.findIndex((p) => p.id === player.id);
     players[playerIndex] = player;
