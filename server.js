@@ -14,6 +14,15 @@ const app = express();
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
 
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+  res.set('etag', false);
+  next();
+});
+
+app.use(nocache());
+
 app.use(
   helmet({
     hidePoweredBy: {
@@ -22,7 +31,6 @@ app.use(
   }),
 );
 
-app.use(nocache());
 
 app.use("/public", express.static(process.cwd() + "/public"));
 app.use("/assets", express.static(process.cwd() + "/assets"));
